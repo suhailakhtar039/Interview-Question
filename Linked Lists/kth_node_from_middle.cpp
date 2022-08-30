@@ -32,16 +32,6 @@ ListNode* createList(){
     }
     return head;
 }
-ListNode* reverseList(ListNode* head){
-    ListNode *temp=head,*prev=NULL,*nxt;
-    while(temp){
-        nxt=temp->next;
-        temp->next=prev;
-        prev=temp;
-        temp=nxt;
-    }
-    return prev;
-}
 int solve(ListNode *head,int b){
     vector<int> v;
     while(head){
