@@ -2,37 +2,29 @@
 // Date : 20-09-22
 #include<bits/stdc++.h>
 using namespace std;
-vector<vector<int>> solve(vector<int> &v,int k){
-    vector<vector<int>> ans;
-    int n = v.size();
-    unordered_map<int,pair<int,int>> m;
-    for(int i=0; i<n; i++){
-        for(int j=i+1; j<n; j++){
-            m[v[i]+v[j]]={i,j};
-        }
-    }
-    for(int i=0; i<n; i++){
-        for(int j=i+1; j<n; j++){
-            int sum = k-v[i]-v[j];
-            if(m.count(sum)){
-                int i1=m[sum].first,j1=m[sum].second;
-                if(i!=i1 && i!=j1 && j!=i1 && j!=j1){
-                    vector<int> temp;
-                    temp.push_back(v[i]);
-                    temp.push_back(v[j]);
-                    temp.push_back(v[i1]);
-                    temp.push_back(v[j1]);
-                    sort(temp.begin(),temp.end());
-                    ans.push_back(temp);
+vector<vector<int>> solve(vector<int> &nums,int target){
+    int n=nums.size();
+        vector<vector<int>> v;
+        sort(nums.begin(),nums.end());
+        for(int i=0;i<n;i++){
+            if(i>0 and nums[i]==nums[i-1])continue;
+            for(int j=i+1;j<n;j++){
+                int k=j+1,l=n-1;
+                while(k<l){
+                    long long int sum=(nums[i]*1ll+nums[j]*1ll+nums[k]*1ll+nums[l]*1ll);
+                    if(sum==target){
+                        vector<int> four={nums[i],nums[j],nums[k],nums[l]};
+                        v.push_back(four);
+                        while(k<n and nums[k]==four[2])k++;
+                        while(l>=0 and nums[l]==four[3])l--;
+                    }
+                    else if(sum>target)l--;
+                    else k++;
                 }
+                while(j+1<n and nums[j]==nums[j+1])j++;
             }
         }
-    }
-    set<vector<int>> s;
-    for(auto it:ans)s.insert(it);
-    ans.clear();
-    for(auto it:s)ans.push_back(it);
-    return ans;
+        return v;
 }
 int main(){
     int n,k;cin>>n>>k;
