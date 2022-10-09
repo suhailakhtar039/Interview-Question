@@ -34,30 +34,26 @@ void preorder(TreeNode* root){
     preorder(root->left);
     preorder(root->right);
 }
-TreeNode* solve(vector<int> A){
-    stack<TreeNode*> st;
-    TreeNode* root=new TreeNode(A[0]);
-    TreeNode* res=root;
-    st.push(root);
-    for(int i=1;i<A.size();i++){
-        TreeNode* prev=NULL;
-        while(!st.empty() && st.top()->val<=A[i]){
-            prev=st.top();
-            st.pop();
-        }
-        TreeNode* curr=new TreeNode(A[i]);
-        if(prev)   prev->right=curr;
-        else    st.top()->left=curr;
-        st.push(curr);
-    }
-    return res;
+TreeNode* createFromArray(vector<int> &v,int low,int high){
+    if(high<low)return NULL;
+    if(high==low)return new TreeNode(v[low]);
+    int mid = (low+high)/2;
+    TreeNode* root = new TreeNode(v[mid]);
+    root->left = createFromArray(v,low,mid-1);
+    root->right = createFromArray(v,mid+1,high);
+    return root;
+}
+TreeNode* solve(vector<int> v){
+    int n = v.size();
+    int lo = 0,hi = n-1;
+    TreeNode* root = createFromArray(v,lo,hi);
+    return root;
 }
 
-// ==============
 int main(){
     int n;cin>>n;
     vector<int> v(n);
     for(int i=0; i<n; i++)cin>>v[i];
-    TreeNode* root = solve(v);
-    preorder(root);
+    TreeNode* ans = solve(v);
+    preorder(ans);
 }
