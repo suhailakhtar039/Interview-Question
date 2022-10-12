@@ -35,34 +35,31 @@ void preorder(TreeNode* root){
     preorder(root->right);
 }
 // ========
-vector<int> solve(TreeNode* root,int k){
+vector<int> solve(TreeNode* root){
     vector<int> ans;
     queue<TreeNode*> q;
-    if(root->val==k)return ans;
     q.push(root);
-    bool found = false;
-    while(!q.empty() && !found){
+    vector<vector<int>> store;
+    while(q.size()){
         int n = q.size();
         for(int i=1; i<=n; i++){
             TreeNode* f = q.front();q.pop();
-            TreeNode *l = f->left, *r = f->right;
-            if((l && l->val==k)||(r && r->val==k)){
-                found = true;
-            }else{
-                if(l)q.push(l);
-                if(r)q.push(r);
-            }
+            if(f->left)q.push(f->left);
+            if(f->right)q.push(f->right);
+            ans.push_back(f->val);
         }
+        store.push_back(ans);
+        ans.clear();
     }
-    while (q.size()){
-        ans.push_back(q.front()->val);
-        q.pop();
+    reverse(store.begin(),store.end());
+    for(auto it:store){
+        for(auto ij:it)
+            ans.push_back(ij);
     }
     return ans;
 }
 int main(){
     TreeNode* root = createTree();
-    int k; cin>>k;
-    vector<int> ans = solve(root,k);
+    vector<int> ans = solve(root);
     for(auto i:ans)cout<<i<<" ";
 }
