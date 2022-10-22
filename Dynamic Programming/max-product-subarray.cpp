@@ -2,26 +2,35 @@
 // Date : 22-10-22
 #include <bits/stdc++.h>
 using namespace std;
-int solve(vector<int> v){
-    int n = v.size();
-    int mx = v[0];
-    int imax = mx, imin = mx;
-    for(int i=1; i<n; i++){
-        if(v[i]<0)
-            swap(imax,imin);
-        
-        imax = max(v[i],v[i]*imax);
-        imin = min(v[i],v[i]*imin);
-
-        mx = max(mx,imax);
+int solve(vector<int> A)
+{
+    int ans = INT_MIN;
+    int prod = 1;
+    for (int i = 0; i < A.size(); i++)
+    {
+        prod *= A[i];
+        ans = max(ans, prod);
+        if (prod == 0)
+            prod = 1;
     }
-    return mx;
+    prod = 1;
+    for (int i = A.size() - 1; i >= 0; i--)
+    {
+        prod *= A[i];
+        ans = max(ans, prod);
+        if (prod == 0)
+            prod = 1;
+    }
+    return ans;
 }
-int main(){
-    int n; cin>>n; 
+int main()
+{
+    int n;
+    cin >> n;
     vector<int> v(n);
-    for(int i=0; i<n; i++){
-        cin>>v[i];
+    for (int i = 0; i < n; i++)
+    {
+        cin >> v[i];
     }
-    cout<<solve(v);
+    cout << solve(v);
 }
